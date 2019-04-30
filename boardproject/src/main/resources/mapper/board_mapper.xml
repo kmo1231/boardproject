@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.miok.dao.BoardDAO">
+	<!-- mysql -->
+	<select id="selectBoardList" resultType="com.miok.vo.BoardVO">
+		SELECT BRDNO, BRDTITLE,
+		BRDWRITER, DATE_FORMAT(BRDDATE,'%Y-%m-%d') BRDDATE
+		FROM board.TBL_BOARD
+		ORDER BY BRDNO DESC
+	</select>
+
+	<insert id="insertBoard" parameterType="com.miok.vo.BoardVO">
+		INSERT INTO TBL_BOARD(BRDTITLE, BRDWRITER, BRDMEMO, BRDDATE)
+		VALUES
+		(#{brdtitle}, #{brdwriter}, #{brdmemo}, NOW() )
+	</insert>
+
+	<update id="updateBoard" parameterType="com.miok.vo.BoardVO">
+		UPDATE TBL_BOARD
+		SET BRDTITLE=#{brdtitle}
+		, BRDWRITER=#{brdwriter}
+		, BRDMEMO=#{brdmemo}
+		WHERE BRDNO=#{brdno}
+	</update>
+
+	<select id="selectBoardOne" parameterType="int" resultType="com.miok.vo.BoardVO">
+		SELECT BRDNO, BRDTITLE, BRDWRITER, BRDMEMO,
+		DATE_FORMAT(BRDDATE,'%Y-%m-%d') BRDDATE
+		FROM board.TBL_BOARD
+		WHERE BRDNO=#{brdno}
+	</select>
+
+	<delete id="deleteBoardOne" parameterType="int">
+		DELETE
+		FROM board.TBL_BOARD
+		WHERE BRDNO=#{brdno}
+	</delete>
+
+</mapper>
