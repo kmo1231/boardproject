@@ -1,17 +1,17 @@
 package com.miok.vo;
 
 public class BoardVO {
-	private int brdno;
-	private String brdtitle, brdwriter, brdmemo, brddate, brdhit, brddeleteflag;
+
+	private String brdno, brdtitle, brdwriter, brdmemo, brddate, brdhit, brddeleteflag;
 	
-	public int getBrdno() {
+	public String getBrdno() {
 		return brdno;
 	}
 
-	public void setBrdno(int brdno) {
+	public void setBrdno(String brdno) {
 		this.brdno = brdno;
 	}
-
+	
 	public String getBrdtitle() {
 		return brdtitle;
 	}

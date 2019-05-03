@@ -8,7 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.miok.common.PageVO;
 import com.miok.service.BoardService;
@@ -60,13 +64,12 @@ public class boardController {
 	
 	// 글쓰기 저장
 	@RequestMapping(value = "/boardSave")
-   	public String boardSave(@ModelAttribute BoardVO boardInfo) throws Exception {
-		if(boardInfo.getBrdno() == 0) {
+   	public String boardSave(BoardVO boardInfo) throws Exception{
+		if(boardInfo.getBrdno() == null || "".equals(boardInfo.getBrdno())) {
     		boardService.insertBoard(boardInfo);
     	} else {
     		boardService.updateBoard(boardInfo);
     	}
-		
         return "redirect:/boardList";
     }
 	
