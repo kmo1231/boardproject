@@ -12,4 +12,5 @@ public interface BoardService {
 	public BoardVO selectBoardOne(int brdno);
 	public void deleteBoardOne(int brdno);
 	public int selectBoardCount();
+	public void updateBoardHit(int brdno);
 }

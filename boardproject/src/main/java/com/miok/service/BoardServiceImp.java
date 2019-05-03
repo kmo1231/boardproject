@@ -43,6 +43,11 @@ public class BoardServiceImp implements BoardService{
 	public int selectBoardCount() {
 		return boardDAO.selectBoardCount();
 	}
+
+	@Override
+	public void updateBoardHit(int brdno) {
+		boardDAO.updateBoardHit(brdno);
+	}
 	
 	
 }

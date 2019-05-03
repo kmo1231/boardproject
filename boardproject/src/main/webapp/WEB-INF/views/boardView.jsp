@@ -37,7 +37,7 @@
 		</tbody>
 	</table>
 	</form>
-	<input type="button" onclick="history.back(-1)" value="돌아가기" />
+	<input type="button" onclick="brdList()" value="돌아가기" />
 	<input type="button" onclick="brdDel()" value="삭제" />
 	<input type="button" onclick="brdUpd()" value="수정" />
 	

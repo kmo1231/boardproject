@@ -12,7 +12,7 @@
 
 </head>
 <body>
-	<form name="form1" action="boardUpdateSave" method="post">
+	<form name="form1" action="boardSave" method="post">
 		<table border="1" style="width:600px">
 			<caption>게시판</caption>
 			<colgroup>

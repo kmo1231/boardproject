@@ -14,6 +14,20 @@ import com.miok.common.PageVO;
 import com.miok.service.BoardService;
 import com.miok.vo.BoardVO;
 
+/*
+	ver.1
+	- List: 모든 게시물 출력
+	- Form: 사용자 입력 내용 저장
+	- Update: 사용자 입력 내용 수정
+	- Read:   사용자 입력 내용 보기
+	- Delete: 지정된 게시물 삭제
+	
+	ver.2
+	- List: 페이징, 새로운 번호 부여
+	- Form: 입력/수정을 하나로
+	- Read: 조회수
+	- Delete: 삭제에서 숨기기로
+*/
 
 @Controller
 public class boardController {
@@ -34,40 +48,34 @@ public class boardController {
 
 	// 글쓰기
 	@RequestMapping(value = "/boardForm")
-	public String boardForm() {
+	public String boardForm(HttpServletRequest request, Model model) {
+		String brdno = request.getParameter("brdno");
+		if(brdno != null) {
+			BoardVO boardInfo = boardService.selectBoardOne(Integer.parseInt(brdno));
+			model.addAttribute("boardInfo", boardInfo);
+		}
+		
 		return "/boardForm";
 	}
 	
 	// 글쓰기 저장
 	@RequestMapping(value = "/boardSave")
    	public String boardSave(@ModelAttribute BoardVO boardInfo) throws Exception {
-    	
-    	boardService.insertBoard(boardInfo);
-    	
+		if(boardInfo.getBrdno() == 0) {
+    		boardService.insertBoard(boardInfo);
+    	} else {
+    		boardService.updateBoard(boardInfo);
+    	}
+		
         return "redirect:/boardList";
     }
 	
-	// 글수정
-	@RequestMapping(value = "/boardUpdate")
-	public String boardUpdate(HttpServletRequest request, Model model) {
-		int brdno = Integer.parseInt(request.getParameter("brdno"));
-		BoardVO boardInfo = boardService.selectBoardOne(brdno);
-		model.addAttribute("boardInfo", boardInfo);
-		return "boardUpdate";
-	}
-
-	// 글 수정 저장
-	@RequestMapping(value = "/boardUpdateSave")
-	public String board1UpdateSave(@ModelAttribute BoardVO boardInfo) {
-		boardService.updateBoard(boardInfo);
-		return "redirect:/boardList";
-	}
-
 	// 글읽기
 	@RequestMapping(value = "/boardView")
 	public String boardView(HttpServletRequest request, Model model) {
 		int brdno = Integer.parseInt(request.getParameter("brdno"));
-
+		
+		boardService.updateBoardHit(brdno);
 		BoardVO boardInfo = boardService.selectBoardOne(brdno);
 
 		model.addAttribute("boardInfo", boardInfo);

@@ -15,4 +15,5 @@ public interface BoardDAO {
 	public BoardVO selectBoardOne(int brdno);
 	public void deleteBoardOne(int brdno);
 	public int selectBoardCount();
+	public void updateBoardHit(int brdno);
 }

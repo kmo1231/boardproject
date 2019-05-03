@@ -13,9 +13,9 @@
 	</select>
 
 	<insert id="insertBoard" parameterType="com.miok.vo.BoardVO">
-		INSERT INTO TBL_BOARD(BRDTITLE, BRDWRITER, BRDMEMO, BRDDATE)
+		INSERT INTO TBL_BOARD(BRDTITLE, BRDWRITER, BRDMEMO, BRDDATE, BRDHIT, BRDDELETEFLAG)
 		VALUES
-		(#{brdtitle}, #{brdwriter}, #{brdmemo}, NOW() )
+		(#{brdtitle}, #{brdwriter}, #{brdmemo}, NOW(), 0, 'N' )
 	</insert>
 
 	<update id="updateBoard" parameterType="com.miok.vo.BoardVO">
@@ -23,7 +23,8 @@
 		SET BRDTITLE=#{brdtitle}
 		, BRDWRITER=#{brdwriter}
 		, BRDMEMO=#{brdmemo}
-		WHERE BRDNO=#{brdno}
+		WHERE BRDDELETEFLAG='N'
+		AND BRDNO=#{brdno}
 	</update>
 
 	<select id="selectBoardOne" parameterType="int" resultType="com.miok.vo.BoardVO">
@@ -33,11 +34,11 @@
 		WHERE BRDNO=#{brdno}
 	</select>
 
-	<delete id="deleteBoardOne" parameterType="int">
-		DELETE
-		FROM board.TBL_BOARD
+	<update id="deleteBoardOne" parameterType="int">
+		UPDATE TBL_BOARD
+		SET BRDDELETEFLAG = 'Y'
 		WHERE BRDNO=#{brdno}
-	</delete>
+	</update>
 	
 	<select id="selectBoardCount" resultType="int">
 		SELECT COUNT(*)
@@ -45,6 +46,11 @@
 		WHERE BRDDELETEFLAG='N'
 	</select>
 	
+	<update id="updateBoardHit" parameterType="int">
+		UPDATE TBL_BOARD
+		SET BRDHIT = BRDHIT + 1
+		WHERE BRDNO = #{brdno}
+	</update>
 	
 	
 </mapper>

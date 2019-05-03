@@ -3,5 +3,9 @@ function brdDel() {
 };
 
 function brdUpd() {
-	$('#form1').attr('action', host+contextPath+'/boardUpdate').submit();
+	$('#form1').attr('action', host+contextPath+'/boardForm').submit();
 };
+
+function brdList(){
+	$('#form1').attr('action', host+contextPath+'/boardList').submit();
+}
