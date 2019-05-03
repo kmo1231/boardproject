@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.miok.common.PageVO;
 import com.miok.service.BoardService;
 import com.miok.vo.BoardVO;
 
@@ -22,8 +23,10 @@ public class boardController {
 
 	// 리스트
 	@RequestMapping(value = "/boardList")
-	public String boardList(Model model) {
-		List<BoardVO> boardList = boardService.selectBoardList();
+	public String boardList(PageVO pageVO, Model model) {
+		pageVO.pageCalculate(boardService.selectBoardCount());
+		
+		List<BoardVO> boardList = boardService.selectBoardList(pageVO);
 
 		model.addAttribute("boardList", boardList);
 		return "/boardList";

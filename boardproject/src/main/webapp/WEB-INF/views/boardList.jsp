@@ -30,6 +30,7 @@
 				<th>제목</th>
 				<th>등록자</th>
 				<th>등록일</th>
+				<th>조회수</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -39,14 +40,48 @@
 				</c:url>		
 										  				
 				<tr>
-					<td><c:out value="${listview.brdno}"/></td>
+					<td><c:out value="${pageVO.totRow-((pageVO.page-1)*pageVO.displayRowCount + status.index)}"/></td>
 					<td><a href="${link}"><c:out value="${listview.brdtitle}"/></a></td>
 					<td><c:out value="${listview.brdwriter}"/></td>
 					<td><c:out value="${listview.brddate}"/></td>
+					<td><c:out value="${listview.brdhit}"/></td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
+	
+	
+	<c:if test="${pageVO.totPage > 1}">
+		<div class="paging">
+			<c:if test="${pageVO.pageStart > 1 }">
+				<c:url var="blockLink" value="boardList">
+					<c:param name="page" value="${pageVO.page - pageVO.displayPage}" />
+				</c:url>
+				<a href="${blockLink }"> &lt; </a>
+			</c:if>
+			
+			<c:forEach var="i" begin="${pageVO.pageStart }" end="${pageVO.pageEnd }" step="1">
+				<c:url var="pageLink" value="boardList">
+					<c:param name="page" value="${i }" />
+				</c:url>
+				<c:choose>
+					<c:when test="${i eq pageVO.page }">
+						<c:out value="${i }" />
+					</c:when>
+					<c:otherwise>
+						<a href="${pageLink }"><c:out value="${i }" /></a>
+					</c:otherwise>
+				</c:choose>
+				<c:url var="blockLink" value="boardList">
+					<c:param name="page" value="${i + pageVO.displayPage - 1}" />
+				</c:url>
+			</c:forEach>
+			<c:if test="${pageVO.pageEnd < pageVO.totPage }">
+				<a href="${blockLink }"> &gt; </a>
+			</c:if>
+		</div>
+		<br/>
+	</c:if>
 	
 	</form>
 </body>

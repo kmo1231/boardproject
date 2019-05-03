@@ -3,11 +3,13 @@
 
 <mapper namespace="com.miok.dao.BoardDAO">
 	<!-- mysql -->
-	<select id="selectBoardList" resultType="com.miok.vo.BoardVO">
+	<select id="selectBoardList" resultType="com.miok.vo.BoardVO" parameterType="com.miok.vo.BoardVO">
 		SELECT BRDNO, BRDTITLE,
-		BRDWRITER, DATE_FORMAT(BRDDATE,'%Y-%m-%d') BRDDATE
+		BRDWRITER, DATE_FORMAT(BRDDATE,'%Y-%m-%d') BRDDATE, BRDHIT
 		FROM board.TBL_BOARD
+		WHERE BRDDELETEFLAG='N'
 		ORDER BY BRDNO DESC
+		LIMIT ${rowStart -1}, ${displayRowCount}
 	</select>
 
 	<insert id="insertBoard" parameterType="com.miok.vo.BoardVO">
@@ -36,5 +38,13 @@
 		FROM board.TBL_BOARD
 		WHERE BRDNO=#{brdno}
 	</delete>
-
+	
+	<select id="selectBoardCount" resultType="int">
+		SELECT COUNT(*)
+		FROM TBL_BOARD
+		WHERE BRDDELETEFLAG='N'
+	</select>
+	
+	
+	
 </mapper>

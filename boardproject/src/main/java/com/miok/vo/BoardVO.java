@@ -2,7 +2,7 @@ package com.miok.vo;
 
 public class BoardVO {
 	private int brdno;
-	private String brdtitle, brdwriter, brdmemo, brddate;
+	private String brdtitle, brdwriter, brdmemo, brddate, brdhit, brddeleteflag;
 	
 	public int getBrdno() {
 		return brdno;
@@ -43,6 +43,21 @@ public class BoardVO {
 	public void setBrddate(String brddate) {
 		this.brddate = brddate;
 	}
-	
+
+	public String getBrdhit() {
+		return brdhit;
+	}
+
+	public void setBrdhit(String brdhit) {
+		this.brdhit = brdhit;
+	}
+
+	public String getBrddeleteflag() {
+		return brddeleteflag;
+	}
+
+	public void setBrddeleteflag(String brddeleteflag) {
+		this.brddeleteflag = brddeleteflag;
+	}
 	
 }
