@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.miok.common.PageVO;
+import com.miok.common.SearchVO;
 import com.miok.dao.BoardDAO;
 import com.miok.vo.BoardVO;
 
@@ -15,18 +16,23 @@ public class BoardServiceImp implements BoardService{
 	private BoardDAO boardDAO;
 	
 	@Override
-	public List<BoardVO> selectBoardList(PageVO pageVO) {
-		return boardDAO.selectBoardList(pageVO);
+	public List<BoardVO> selectBoardList(SearchVO searchVO) {
+		return boardDAO.selectBoardList(searchVO);
 	}
 
 	@Override
 	public void insertBoard(BoardVO boardVO) {
-		boardDAO.insertBoard(boardVO);
+		if(boardVO.getBrdno() == null || "".equals(boardVO.getBrdno())){
+			boardDAO.insertBoard(boardVO);
+		}else {
+			boardDAO.updateBoard(boardVO);
+		}
+		
 	}
 
 	@Override
 	public void updateBoard(BoardVO boardVO) {
-		boardDAO.updateBoard(boardVO);
+		/*boardDAO.updateBoard(boardVO);*/
 	}
 
 	@Override
@@ -40,8 +46,8 @@ public class BoardServiceImp implements BoardService{
 	}
 
 	@Override
-	public int selectBoardCount() {
-		return boardDAO.selectBoardCount();
+	public int selectBoardCount(SearchVO searchVO) {
+		return boardDAO.selectBoardCount(searchVO);
 	}
 
 	@Override

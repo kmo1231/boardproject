@@ -29,7 +29,9 @@ public class BoardVO {
 	}
 
 	public String getBrdmemo() {
-		return brdmemo;
+		/* 게시판 내용에 악의적으로 입력한 자바스크립트가 실행되지 않도록 설정
+		 * 정규식에서(?i)는 대소문자 방지구분 없음. */
+		return brdmemo.replaceAll("(?i)<script", "&lt;script");
 	}
 
 	public void setBrdmemo(String brdmemo) {

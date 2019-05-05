@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.miok.common.PageVO;
+import com.miok.common.SearchVO;
 import com.miok.service.BoardService;
 import com.miok.vo.BoardVO;
 
@@ -31,6 +32,11 @@ import com.miok.vo.BoardVO;
 	- Form: 입력/수정을 하나로
 	- Read: 조회수
 	- Delete: 삭제에서 숨기기로
+	
+	ver.3
+	- List: 검색, 제목 한 줄 표시 >> 페이징 공통
+	- Form: 필수입력, 수정/저장 서비스 합침
+	- Read: 스크립트 실행 방지
 */
 
 @Controller
@@ -41,12 +47,13 @@ public class boardController {
 
 	// 리스트
 	@RequestMapping(value = "/boardList")
-	public String boardList(PageVO pageVO, Model model) {
-		pageVO.pageCalculate(boardService.selectBoardCount());
+	public String boardList(SearchVO searchVO, Model model) {
+		searchVO.pageCalculate(boardService.selectBoardCount(searchVO));
 		
-		List<BoardVO> boardList = boardService.selectBoardList(pageVO);
+		List<BoardVO> boardList = boardService.selectBoardList(searchVO);
 
 		model.addAttribute("boardList", boardList);
+		model.addAttribute("searchVO", searchVO);
 		return "/boardList";
 	}
 
@@ -65,12 +72,9 @@ public class boardController {
 	// 글쓰기 저장
 	@RequestMapping(value = "/boardSave")
    	public String boardSave(BoardVO boardInfo) throws Exception{
-		if(boardInfo.getBrdno() == null || "".equals(boardInfo.getBrdno())) {
-    		boardService.insertBoard(boardInfo);
-    	} else {
-    		boardService.updateBoard(boardInfo);
-    	}
-        return "redirect:/boardList";
+   		boardService.insertBoard(boardInfo);
+
+   		return "redirect:/boardList";
     }
 	
 	// 글읽기

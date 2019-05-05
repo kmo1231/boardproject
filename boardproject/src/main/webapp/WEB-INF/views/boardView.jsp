@@ -32,7 +32,8 @@
 			</tr>
 			<tr>
 				<td>내용</td>
-				<td><c:out value="${boardInfo.brdmemo}" /></td>
+				<!-- 내용부분에 입력한 html코드를 적용하기 위해 escapeXml설정 -->
+				<td><c:out value="${boardInfo.brdmemo}" escapeXml="false"/></td>
 			</tr>
 		</tbody>
 	</table>

@@ -1,20 +1,20 @@
 package com.miok.common;
 
 public class PageVO {
-    private int displayRowCount = 5;			// 출력할 데이터 개수
-    private int displayPage = 2;				// 출력할 페이지 번호 수
-    private int rowStart;                       // 시작행번호
-    private int rowEnd;                         // 종료행 번호
-    private int totPage;                        // 전체 페이수
-    private int totRow = 0;                     // 전체 데이터 수
-    private int page;                           // 현재 페이지
-    private int pageStart;                      // 시작페이지
-    private int pageEnd;                        // 종료페이지
+    private Integer displayRowCount = 5;			// 출력할 데이터 개수
+    private Integer displayPage = 2;				// 출력할 페이지 번호 수
+    private Integer rowStart;                       // 시작행번호
+    private Integer rowEnd;                         // 종료행 번호
+    private Integer totPage;                        // 전체 페이수
+    private Integer totRow = 0;                     // 전체 데이터 수
+    private Integer page;                           // 현재 페이지
+    private Integer pageStart;                      // 시작페이지
+    private Integer pageEnd;                        // 종료페이지
 
     /**
      * 전체 데이터 개수(total)를 이용하여 페이지수 계산. 
      */
-    public void pageCalculate(int total) {
+    public void pageCalculate(Integer total) {
         getPage();
         totRow  = total;
         totPage    = (int) ( total / displayRowCount );
@@ -24,9 +24,7 @@ public class PageVO {
         }
 
         pageStart = ((page - 1) / displayPage) * displayPage + 1;
-        //pageStart = (page - (page - 1) % 5) ;
         pageEnd = pageStart + displayPage - 1;
-        //pageEnd = pageStart + 4;
         if (pageEnd > totPage) {
             pageEnd = totPage;
         }
@@ -39,8 +37,8 @@ public class PageVO {
     /**
      * 현재 페이지 번호. 
      */
-    public int getPage() {
-        if (page == 0) {
+    public Integer getPage() {
+        if (page == null || page==0) {
             page = 1;
         }
         
@@ -107,19 +105,14 @@ public class PageVO {
         this.pageEnd = pageEnd;
     }
 
-
 	public Integer getDisplayPage() {
 		return displayPage;
 	}
-
 
 	public void setDisplayPage(Integer displayPage) {
 		this.displayPage = displayPage;
 	}
     
-    
-
-
     
 }
 
