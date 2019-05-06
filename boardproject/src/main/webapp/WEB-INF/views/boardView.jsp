@@ -35,6 +35,16 @@
 				<!-- 내용부분에 입력한 html코드를 적용하기 위해 escapeXml설정 -->
 				<td><c:out value="${boardInfo.brdmemo}" escapeXml="false"/></td>
 			</tr>
+			<tr>
+				<td>첨부</td> 
+				<td>
+					<c:forEach var="filelist" items="${filelist}" varStatus="status">	
+           				<a href="fileDownload?filename=<c:out value="${filelist.filename}"/>&downname=<c:out value="${filelist.realname }"/>"> 							 
+						<c:out value="${filelist.filename}"/></a> <c:out value="${filelist.size2String()}"/><br/>
+					</c:forEach>
+				</td> 
+			</tr>
+			
 		</tbody>
 	</table>
 	</form>

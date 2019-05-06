@@ -12,7 +12,7 @@
 
 </head>
 <body>
-	<form name="form1" action="boardSave" method="post">
+	<form name="form1" action="boardSave" method="post" enctype="multipart/form-data" >
 		<table border="1" style="width:600px">
 			<caption>게시판</caption>
 			<colgroup>
@@ -32,6 +32,20 @@
 					<td>내용</td> 
 					<td><textarea name="brdmemo" rows="5" cols="60"><c:out value="${boardInfo.brdmemo}" /> </textarea></td> 
 				</tr>
+				<tr>
+					<td>첨부</td> 
+					<td>
+						<p>삭제할 파일을 체크 후 저장하세요</p>
+						<c:forEach var="filelist" items="${filelist}" varStatus="status">
+							<input type="checkbox" name="fileno" value="<c:out value="${filelist.fileno}"/>">	
+            				<a href="fileDownload?filename=<c:out value="${filelist.filename}"/>&downname=<c:out value="${filelist.realname }"/>"> 							 
+							<c:out value="${filelist.filename}"/></a> <c:out value="${filelist.size2String()}"/><br/>
+						</c:forEach>					
+					
+						<input type="file" name="uploadfile" multiple="" />
+					</td>
+				</tr>
+				
 			</tbody>
 		</table>
 		<input type="hidden" name="brdno" value="<c:out value="${boardInfo.brdno}"/>">  

@@ -32,6 +32,7 @@
 				<th>등록자</th>
 				<th>등록일</th>
 				<th>조회수</th>
+				<th>첨부</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -46,6 +47,7 @@
 					<td><c:out value="${listview.brdwriter}"/></td>
 					<td><c:out value="${listview.brddate}"/></td>
 					<td><c:out value="${listview.brdhit}"/></td>
+					<td><c:out value="${listview.filecnt}"/></td>
 				</tr>
 			</c:forEach>
 		</tbody>

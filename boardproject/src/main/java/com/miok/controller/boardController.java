@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.miok.common.FileUtil;
+import com.miok.common.FileVO;
 import com.miok.common.PageVO;
 import com.miok.common.SearchVO;
 import com.miok.service.BoardService;
@@ -37,6 +39,9 @@ import com.miok.vo.BoardVO;
 	- List: 검색, 제목 한 줄 표시 >> 페이징 공통
 	- Form: 필수입력, 수정/저장 서비스 합침
 	- Read: 스크립트 실행 방지
+	
+	ver.4
+	- 파일 첨부 기능 추가
 */
 
 @Controller
@@ -63,7 +68,10 @@ public class boardController {
 		String brdno = request.getParameter("brdno");
 		if(brdno != null) {
 			BoardVO boardInfo = boardService.selectBoardOne(Integer.parseInt(brdno));
+			List<FileVO> filelist = boardService.selectBoardFileList(brdno);
+			
 			model.addAttribute("boardInfo", boardInfo);
+			model.addAttribute("filelist", filelist);
 		}
 		
 		return "/boardForm";
@@ -71,8 +79,13 @@ public class boardController {
 	
 	// 글쓰기 저장
 	@RequestMapping(value = "/boardSave")
-   	public String boardSave(BoardVO boardInfo) throws Exception{
-   		boardService.insertBoard(boardInfo);
+   	public String boardSave(HttpServletRequest request, BoardVO boardInfo) {
+   		String[] fileno = request.getParameterValues("fileno");
+   		
+   		FileUtil fs = new FileUtil();
+   		List<FileVO> filelist = fs.saveAllFiles(boardInfo.getUploadfile());
+		
+		boardService.insertBoard(boardInfo, filelist, fileno);
 
    		return "redirect:/boardList";
     }
@@ -80,13 +93,15 @@ public class boardController {
 	// 글읽기
 	@RequestMapping(value = "/boardView")
 	public String boardView(HttpServletRequest request, Model model) {
-		int brdno = Integer.parseInt(request.getParameter("brdno"));
+		String brdno = request.getParameter("brdno");
 		
-		boardService.updateBoardHit(brdno);
-		BoardVO boardInfo = boardService.selectBoardOne(brdno);
-
+		boardService.updateBoardHit(Integer.parseInt(brdno));
+		BoardVO boardInfo = boardService.selectBoardOne(Integer.parseInt(brdno));
+		List<FileVO> filelist = boardService.selectBoardFileList(brdno);
+		
 		model.addAttribute("boardInfo", boardInfo);
-
+		model.addAttribute("filelist", filelist);
+		
 		return "/boardView";
 	}
 

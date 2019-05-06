@@ -1,8 +1,13 @@
 package com.miok.vo;
 
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 public class BoardVO {
 
-	private String brdno, brdtitle, brdwriter, brdmemo, brddate, brdhit, brddeleteflag;
+	private String brdno, brdtitle, brdwriter, brdmemo, brddate, brdhit, brddeleteflag, filecnt;
+	private List<MultipartFile> uploadfile;
 	
 	public String getBrdno() {
 		return brdno;
@@ -61,5 +66,22 @@ public class BoardVO {
 	public void setBrddeleteflag(String brddeleteflag) {
 		this.brddeleteflag = brddeleteflag;
 	}
+
+	public String getFilecnt() {
+		return filecnt;
+	}
+
+	public void setFilecnt(String filecnt) {
+		this.filecnt = filecnt;
+	}
+
+	public List<MultipartFile> getUploadfile() {
+		return uploadfile;
+	}
+
+	public void setUploadfile(List<MultipartFile> uploadfile) {
+		this.uploadfile = uploadfile;
+	}
+	
 	
 }

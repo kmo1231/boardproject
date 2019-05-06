@@ -19,17 +19,21 @@
 	
 	<select id="selectBoardList" resultType="com.miok.vo.BoardVO" parameterType="com.miok.common.SearchVO">
 		SELECT BRDNO, BRDTITLE,
-		BRDWRITER, DATE_FORMAT(BRDDATE,'%Y-%m-%d') BRDDATE, BRDHIT
-		FROM board.TBL_BOARD
+		BRDWRITER, DATE_FORMAT(BRDDATE,'%Y-%m-%d') BRDDATE, BRDHIT,
+		(SELECT COUNT(*) FROM TBL_BOARDFILE WHERE BRDNO=TB.BRDNO) FILECNT
+		FROM board.TBL_BOARD TB
 		<include refid="includeBoard" />
 		ORDER BY BRDNO DESC
 		LIMIT ${rowStart -1}, ${displayRowCount}
 	</select>
 
 	<insert id="insertBoard" parameterType="com.miok.vo.BoardVO">
-		INSERT INTO TBL_BOARD(BRDTITLE, BRDWRITER, BRDMEMO, BRDDATE, BRDHIT, BRDDELETEFLAG)
-		VALUES
-		(#{brdtitle}, #{brdwriter}, #{brdmemo}, NOW(), 0, 'N' )
+		<selectKey resultType="String" keyProperty="brdno" order="BEFORE">
+			SELECT IFNULL(MAX(BRDNO),0)+1 FROM TBL_BOARD
+		</selectKey>
+		
+		INSERT INTO TBL_BOARD(BRDNO, BRDTITLE, BRDWRITER, BRDMEMO, BRDDATE, BRDHIT, BRDDELETEFLAG)
+		VALUES (#{brdno}, #{brdtitle}, #{brdwriter}, #{brdmemo}, NOW(), 0, 'N' )
 	</insert>
 
 	<update id="updateBoard" parameterType="com.miok.vo.BoardVO">
@@ -60,4 +64,26 @@
 		WHERE BRDNO = #{brdno}
 	</update>
 	
+	<!-- 파일첨부부분 -->
+	<insert id="insertBoardFile" parameterType="com.miok.common.FileVO">
+		INSERT INTO TBL_BOARDFILE (BRDNO, FILENAME, REALNAME, FILESIZE)
+		VALUES (#{parentPK}, #{filename}, #{realname}, #{filesize})
+	</insert>
+	
+	<select id="selectBoardFileList" resultType="com.miok.common.FileVO" parameterType="String">
+		SELECT FILENO, FILENAME, REALNAME, FILESIZE
+		FROM TBL_BOARDFILE
+		WHERE BRDNO=#{brdno}
+		ORDER BY FILENO DESC
+	</select>
+	
+	<delete id="deleteBoardFile" parameterType="hashmap">
+		DELETE
+		FROM TBL_BOARDFILE
+		WHERE FILENO IN (
+						<foreach collection="fileno" item="item" index="index" separator=",">
+							${item}
+						</foreach>
+						)
+	</delete>
 </mapper>
