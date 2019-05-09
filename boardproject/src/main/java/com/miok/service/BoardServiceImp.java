@@ -90,7 +90,17 @@ public class BoardServiceImp implements BoardService{
 
 	@Override
 	public void insertBoardReply(BoardReplyVO replyInfo) {
+		
 		if(replyInfo.getReno() == null || "".equals(replyInfo.getReno())) {
+			if(replyInfo.getReparent() != null) {
+				BoardReplyVO replyVO = boardDAO.selectBoardReplyParent(replyInfo.getReparent());
+				replyInfo.setRedepth(replyVO.getRedepth());
+				replyInfo.setReorder(replyVO.getReorder() + 1);
+				boardDAO.updateBoardReplyOrder(replyVO);
+			} else {
+				Integer reorder = boardDAO.selectBoardReplyMaxOrder(replyInfo.getBrdno());
+				replyInfo.setReorder(reorder);
+			}
 			boardDAO.insertBoardReply(replyInfo);
 		}else {
 			boardDAO.updateBoardReply(replyInfo);
@@ -102,7 +112,16 @@ public class BoardServiceImp implements BoardService{
 	}
 	
 	@Override
-	public void deleteBoardReply(String reno) {
+	public boolean deleteBoardReply(String reno) {
+		Integer cnt = boardDAO.selectBoardReplyChild(reno);
+		
+		if(cnt > 0) {
+			return false;
+		}
+		
+		boardDAO.updateBoardReplyOrderDelete(reno);
 		boardDAO.deleteBoardReply(reno);
+		
+		return true;
 	}
 }

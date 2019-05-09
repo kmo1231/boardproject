@@ -46,6 +46,9 @@ import com.miok.vo.BoardVO;
 	
 	ver.5
 	- 댓글 기능 추가
+	
+	ver.6
+	- 무한댓글 기능 추가
 */
 
 @Controller
@@ -131,7 +134,10 @@ public class boardController {
 	
 	@RequestMapping(value = "/boardReplyDelete")
 	public String boardReplyDelete(HttpServletRequest request, BoardReplyVO replyInfo) {
-		boardService.deleteBoardReply(replyInfo.getReno());
+		
+		if(!boardService.deleteBoardReply(replyInfo.getReno())) {
+			return "BoardFailure";
+		}
 		
 		return "redirect:/boardView?brdno="+replyInfo.getBrdno();
 	}

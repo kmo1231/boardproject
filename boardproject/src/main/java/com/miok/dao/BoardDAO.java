@@ -24,8 +24,16 @@ public interface BoardDAO {
 	public List<FileVO> selectBoardFileList(String brdno);
 	public void deleteBoardFile(HashMap delFile);
 	
+	/*댓글*/
 	public List<BoardReplyVO> selectBoardReplyList(String brdno);
 	public void insertBoardReply(BoardReplyVO replyInfo);
 	public void updateBoardReply(BoardReplyVO replyInfo);
 	public void deleteBoardReply(String reno);
+	
+	/*무한댓글*/
+	public BoardReplyVO selectBoardReplyParent(String reparent);
+	public void updateBoardReplyOrder(BoardReplyVO replyVO);
+	public Integer selectBoardReplyMaxOrder(String brdno);
+	public Integer selectBoardReplyChild(String reno);
+	public void updateBoardReplyOrderDelete(String reno);
 }

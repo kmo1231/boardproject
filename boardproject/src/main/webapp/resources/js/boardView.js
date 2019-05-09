@@ -1,17 +1,17 @@
 function brdDel() {
-	$('#form1').attr('action', host+contextPath+'/boardDelete').submit();
+	$('#form0').attr('action', host+contextPath+'/boardDelete').submit();
 };
 
 function brdUpd() {
-	$('#form1').attr('action', host+contextPath+'/boardForm').submit();
+	$('#form0').attr('action', host+contextPath+'/boardForm').submit();
 };
 
 function brdList(){
-	$('#form1').attr('action', host+contextPath+'/boardList').submit();
+	$('#form0').attr('action', host+contextPath+'/boardList').submit();
 }
 
 function replySubmit(){
-	$('#form3').attr('action', host+contextPath+'/boardReplySave').submit();
+	$('#form1').attr('action', host+contextPath+'/boardReplySave').submit();
 }
 
 function replyDelete(reno){
@@ -74,3 +74,49 @@ function replyUpdateCancel(){
 	updateReno = updateRememo = null;
 } 
 
+/*대댓글폼 append*/
+function replyReply(reno){
+	var form = document.form3;
+	var reply = document.getElementById("reply"+reno);
+	var replyDia = document.getElementById("replyDialog");
+	replyDia.style.display = "";
+	
+	if (updateReno) {
+		replyUpdateCancel();
+	} 
+	
+	form.rememo.value = "";
+	form.reparent.value=reno;
+	reply.appendChild(replyDia);
+	form.rewriter.focus();
+}
+
+/*대댓글취소*/
+function replyReplyCancel(){
+	hideDiv("replyDialog");
+} 
+
+function hideDiv(id){
+	var div = document.getElementById(id);
+	div.style.display = "none";
+	document.body.appendChild(div);
+}
+
+/*대댓글저장*/
+function replyReplySave(){
+	var form = document.form3;
+	
+	if (form.rewriter.value=="") {
+		alert("작성자를 입력해주세요.");
+		form.rewriter.focus();
+		return;
+	}
+	if (form.rememo.value=="") {
+		alert("글 내용을 입력해주세요.");
+		form.rememo.focus();
+		return;
+	}
+	
+	form.action="boardReplySave";
+	form.submit();	
+}

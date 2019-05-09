@@ -18,5 +18,5 @@ public interface BoardService {
 	
 	public List<BoardReplyVO> selectBoardReplyList(String brdno);
 	public void insertBoardReply(BoardReplyVO replyInfo);
-	public void deleteBoardReply(String reno);
+	public boolean deleteBoardReply(String reno);
 }

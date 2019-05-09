@@ -7,6 +7,9 @@ public class BoardReplyVO {
 	private String redeleteflag;
 	private String rememo;
 	private String redate;
+	private String reparent;
+	private String redepth;
+	private Integer reorder;
 	
 	public String getBrdno() {
 		return brdno;
@@ -54,6 +57,30 @@ public class BoardReplyVO {
 	
 	public void setRedate(String redate) {
 		this.redate = redate;
+	}
+
+	public String getReparent() {
+		return reparent;
+	}
+
+	public void setReparent(String reparent) {
+		this.reparent = reparent;
+	}
+
+	public String getRedepth() {
+		return redepth;
+	}
+
+	public void setRedepth(String redepth) {
+		this.redepth = redepth;
+	}
+
+	public Integer getReorder() {
+		return reorder;
+	}
+
+	public void setReorder(Integer reorder) {
+		this.reorder = reorder;
 	}
 	
 }
