@@ -7,13 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.miok.common.FileVO;
-import com.miok.common.PageVO;
 import com.miok.common.SearchVO;
 import com.miok.dao.BoardDAO;
+import com.miok.vo.BoardReplyVO;
 import com.miok.vo.BoardVO;
 
 @Service
@@ -55,7 +56,7 @@ public class BoardServiceImp implements BoardService{
 				boardDAO.insertBoardFile(fileVO);
 			}
 			txManager.commit(status);
-		}catch (Exception e) {
+		}catch (TransactionException e) {
 			txManager.rollback(status);
 			throw e;
 		}
@@ -85,5 +86,23 @@ public class BoardServiceImp implements BoardService{
 	@Override
 	public List<FileVO> selectBoardFileList(String brdno) {
 		return boardDAO.selectBoardFileList(brdno);
+	}
+
+	@Override
+	public void insertBoardReply(BoardReplyVO replyInfo) {
+		if(replyInfo.getReno() == null || "".equals(replyInfo.getReno())) {
+			boardDAO.insertBoardReply(replyInfo);
+		}else {
+			boardDAO.updateBoardReply(replyInfo);
+		}
+	}
+	
+	public List<BoardReplyVO> selectBoardReplyList(String brdno){
+		return boardDAO.selectBoardReplyList(brdno);
+	}
+	
+	@Override
+	public void deleteBoardReply(String reno) {
+		boardDAO.deleteBoardReply(reno);
 	}
 }

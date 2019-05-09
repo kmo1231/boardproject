@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.miok.common.FileVO;
 import com.miok.common.SearchVO;
+import com.miok.vo.BoardReplyVO;
 import com.miok.vo.BoardVO;
 
 public interface BoardService {
@@ -14,4 +15,8 @@ public interface BoardService {
 	public int selectBoardCount(SearchVO searchVO);
 	public void updateBoardHit(int brdno);
 	public List<FileVO> selectBoardFileList(String brdno);
+	
+	public List<BoardReplyVO> selectBoardReplyList(String brdno);
+	public void insertBoardReply(BoardReplyVO replyInfo);
+	public void deleteBoardReply(String reno);
 }

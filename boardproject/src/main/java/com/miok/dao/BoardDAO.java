@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.miok.common.FileVO;
 import com.miok.common.PageVO;
 import com.miok.common.SearchVO;
+import com.miok.vo.BoardReplyVO;
 import com.miok.vo.BoardVO;
 
 @Repository
@@ -22,4 +23,9 @@ public interface BoardDAO {
 	public void insertBoardFile(FileVO fileVO);
 	public List<FileVO> selectBoardFileList(String brdno);
 	public void deleteBoardFile(HashMap delFile);
+	
+	public List<BoardReplyVO> selectBoardReplyList(String brdno);
+	public void insertBoardReply(BoardReplyVO replyInfo);
+	public void updateBoardReply(BoardReplyVO replyInfo);
+	public void deleteBoardReply(String reno);
 }

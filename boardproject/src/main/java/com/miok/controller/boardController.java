@@ -19,6 +19,7 @@ import com.miok.common.FileVO;
 import com.miok.common.PageVO;
 import com.miok.common.SearchVO;
 import com.miok.service.BoardService;
+import com.miok.vo.BoardReplyVO;
 import com.miok.vo.BoardVO;
 
 /*
@@ -42,6 +43,9 @@ import com.miok.vo.BoardVO;
 	
 	ver.4
 	- 파일 첨부 기능 추가
+	
+	ver.5
+	- 댓글 기능 추가
 */
 
 @Controller
@@ -99,8 +103,11 @@ public class boardController {
 		BoardVO boardInfo = boardService.selectBoardOne(Integer.parseInt(brdno));
 		List<FileVO> filelist = boardService.selectBoardFileList(brdno);
 		
+		List<BoardReplyVO> replylist = boardService.selectBoardReplyList(brdno);
+		
 		model.addAttribute("boardInfo", boardInfo);
 		model.addAttribute("filelist", filelist);
+		model.addAttribute("replylist", replylist);
 		
 		return "/boardView";
 	}
@@ -113,5 +120,19 @@ public class boardController {
 		boardService.deleteBoardOne(brdno);
 
 		return "redirect:/boardList";
+	}
+	
+	@RequestMapping(value = "/boardReplySave")
+	public String boardReplySave(HttpServletRequest request, BoardReplyVO replyInfo) {
+		boardService.insertBoardReply(replyInfo);
+		
+		return "redirect:/boardView?brdno="+replyInfo.getBrdno();
+	}
+	
+	@RequestMapping(value = "/boardReplyDelete")
+	public String boardReplyDelete(HttpServletRequest request, BoardReplyVO replyInfo) {
+		boardService.deleteBoardReply(replyInfo.getReno());
+		
+		return "redirect:/boardView?brdno="+replyInfo.getBrdno();
 	}
 }

@@ -86,4 +86,32 @@
 						</foreach>
 						)
 	</delete>
+	
+	<!-- 댓글 -->
+	<insert id="insertBoardReply" parameterType="com.miok.vo.BoardReplyVO">
+	<selectKey resultType="String" keyProperty="reno" order="BEFORE">
+		SELECT IFNULL(MAX(RENO), 0)+1 FROM TBL_BOARDREPLY
+	</selectKey>
+		INSERT INTO TBL_BOARDREPLY(BRDNO, RENO, REWRITER, REDELETEFLAG, REMEMO, REDATE)
+		VALUES (#{brdno}, #{reno}, #{rewriter}, 'N', #{rememo}, NOW())
+	</insert>
+	
+	<update id="updateBoardReply" parameterType="com.miok.vo.BoardReplyVO">
+		UPDATE TBL_BOARDREPLY
+		SET REMEMO=#{rememo}
+		WHERE RENO=#{reno}
+	</update>
+	
+	<select id="selectBoardReplyList" parameterType="String" resultType="com.miok.vo.BoardReplyVO">
+		SELECT BRDNO, RENO, REWRITER, REDELETEFLAG, REMEMO, REDATE
+		FROM TBL_BOARDREPLY
+		WHERE BRDNO=#{brdno} AND REDELETEFLAG='N'
+		ORDER BY RENO
+	</select>
+	
+	<update id="deleteBoardReply" parameterType="String">
+		UPDATE TBL_BOARDREPLY
+		SET REDELETEFLAG='Y'
+		WHERE RENO=#{reno}
+	</update>
 </mapper>
