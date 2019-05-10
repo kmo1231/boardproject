@@ -95,7 +95,12 @@ public class BoardServiceImp implements BoardService{
 			if(replyInfo.getReparent() != null) {
 				BoardReplyVO replyVO = boardDAO.selectBoardReplyParent(replyInfo.getReparent());
 				replyInfo.setRedepth(replyVO.getRedepth());
-				replyInfo.setReorder(replyVO.getReorder() + 1);
+				
+				Integer reorder = replyVO.getReorder()+boardDAO.selectBoardReplyChild(replyInfo.getReparent()) + 1;
+				replyInfo.setReorder(reorder);
+				
+				//insert하는 replyInfo이후의 댓글은 reorder를 전부 1증가
+				replyVO.setReorder(reorder-1);
 				boardDAO.updateBoardReplyOrder(replyVO);
 			} else {
 				Integer reorder = boardDAO.selectBoardReplyMaxOrder(replyInfo.getBrdno());

@@ -23,6 +23,7 @@
 	</bean>
 	
 	<mvc:resources mapping="/resources/**" location="/resources/" />
+	<mvc:resources mapping="/js/**" location="/resources/js" />
 	
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="100000000" />
