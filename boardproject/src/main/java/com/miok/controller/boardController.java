@@ -1,12 +1,16 @@
 package com.miok.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +53,9 @@ import com.miok.vo.BoardVO;
 	
 	ver.6
 	- 무한댓글 기능 추가
+	
+	ver.7
+	- jquery 일부적용 및 댓글추가, 삭제부분 ajax로 구현
 */
 
 @Controller
@@ -125,6 +132,7 @@ public class boardController {
 		return "redirect:/boardList";
 	}
 	
+	// 댓글저장
 	@RequestMapping(value = "/boardReplySave")
 	public String boardReplySave(HttpServletRequest request, BoardReplyVO replyInfo) {
 		boardService.insertBoardReply(replyInfo);
@@ -132,13 +140,41 @@ public class boardController {
 		return "redirect:/boardView?brdno="+replyInfo.getBrdno();
 	}
 	
+	// 댓글저장(ajax_서버에서 반환될 때 JSP를 이용하여 정리된 값을 만들어넘김)
+	@RequestMapping(value = "/boardReplySaveAjaxJSP")
+    public String board7ReplySaveAjaxJSP(BoardReplyVO ReplyInfo, Model model) {
+        
+        boardService.insertBoardReply(ReplyInfo);
+
+        model.addAttribute("replyInfo", ReplyInfo);
+        
+        return "BoardViewAjaxReply";
+    }
+	
+	// 댓글삭제
 	@RequestMapping(value = "/boardReplyDelete")
-	public String boardReplyDelete(HttpServletRequest request, BoardReplyVO replyInfo) {
-		
+	public String boardReplyDelete(BoardReplyVO replyInfo) {
 		if(!boardService.deleteBoardReply(replyInfo.getReno())) {
 			return "BoardFailure";
 		}
 		
 		return "redirect:/boardView?brdno="+replyInfo.getBrdno();
+	}
+	
+	// 댓글삭제(ajax)
+	@RequestMapping(value="/boardReplyDeleteAjax")
+	public void boardReplyDeleteAjax(HttpServletResponse response, BoardReplyVO replyInfo) {
+		ObjectMapper mapper=new ObjectMapper();
+		response.setContentType("application/json:charset=UTF-8");
+		
+		try {
+			if(!boardService.deleteBoardReply(replyInfo.getReno())) {
+				response.getWriter().print(mapper.writeValueAsString("Fail"));
+			} else {
+				response.getWriter().print(mapper.writeValueAsString("OK"));
+			}
+		} catch (IOException e) {
+			System.out.println("오류: 댓글 삭제에 문제가 발생했습니다.");
+		}
 	}
 }

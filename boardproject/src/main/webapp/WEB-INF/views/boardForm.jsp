@@ -23,15 +23,15 @@
 			<tbody>
 				<tr>
 					<td>작성자</td> 
-					<td><input type="text" name="brdwriter" size="20" maxlength="20" value="<c:out value="${boardInfo.brdwriter}"/>"/></td> 
+					<td><input type="text" id="brdwriter" name="brdwriter" size="20" maxlength="20" value="<c:out value="${boardInfo.brdwriter}"/>"/></td> 
 				</tr>
 				<tr>
 					<td>제목</td> 
-					<td><input type="text" name="brdtitle" size="70" maxlength="250" value="<c:out value="${boardInfo.brdtitle}"/>" /></td> 
+					<td><input type="text" id="brdtitle" name="brdtitle" size="70" maxlength="250" value="<c:out value="${boardInfo.brdtitle}"/>" /></td> 
 				</tr>
 				<tr>
 					<td>내용</td> 
-					<td><textarea name="brdmemo" rows="5" cols="60"><c:out value="${boardInfo.brdmemo}" /> </textarea></td> 
+					<td><textarea id="brdmemo" name="brdmemo" rows="5" cols="60"><c:out value="${boardInfo.brdmemo}" /> </textarea></td> 
 				</tr>
 				<tr>
 					<td>첨부</td> 

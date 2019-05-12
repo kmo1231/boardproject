@@ -56,7 +56,7 @@
 	
 	<form id="form1" name="form1" method="post" action="boardList">
 	
-	<jsp:include page="/WEB-INF/views/paging.jsp"/>
+	<jsp:include page="/WEB-INF/views/common/paging.jsp"/>
 	
 	<div>
 		<input type="checkbox" name="searchType" value="brdtitle" <c:if test="${fn:indexOf(searchVO.searchType, 'brdtitle')!=-1}">checked="checked"</c:if>/>

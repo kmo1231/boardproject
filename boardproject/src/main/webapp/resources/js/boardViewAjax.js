@@ -10,6 +10,7 @@ function brdList(){
 	$('#form0').attr('action', host+contextPath+'/boardList').submit();
 }
 
+// 댓글등록
 function replySubmit(){
 	if ( $.trim($("#rewriter1").val()) == "") {
 		alert("작성자를 입력해주세요.");
@@ -22,19 +23,52 @@ function replySubmit(){
 		return;
 	}
 	
-	$('#form1').attr('action', host+contextPath+'/boardReplySave').submit();
+	var formData = $("#form1").serialize();
+	$.ajax({
+		url: "boardReplySaveAjaxJSP",
+		type: "post",
+		data: formData,
+		success: function(result){
+			if(result!=""){
+				$("#replyList").append(result);
+				alert("저장되었습니다.");
+				//저장한 후 초기화
+				$('#rewriter1').val("");
+				$('#rememo1').val("");
+			} else{
+				alert("서버에 오류가 있어서 저장되지 않았습니다.");
+			}
+		}
+	})
 }
 
+// 댓글삭제
 function replyDelete(reno){
 	if(!confirm("삭제하시겠습니까?")){
 		return;
 	}
 	
-	document.form2.reno.value=reno;
-	$('#form2').attr('action', host+contextPath+'/boardReplyDelete').submit();
+	$.ajax({
+		url: host+contextPath+'/boardReplyDeleteAjax',
+		type: "POST",
+		data: {
+				"brdno": $('#brdno2').val(),
+				"reno": reno
+				},
+		success : function(result){
+			if(result=="OK"){
+				$('#replyItem'+reno).remove();
+				alert('삭제되었습니다');
+			} else{
+				alert('댓글이 있어 삭제할 수 없습니다.');
+			}
+		}
+		
+	})
+	
 }
 
-/*수정시 폼을 보여주는 함수*/
+// 수정시 폼을 보여주는 함수
 var updateReno = updateRememo = null;
 function replyUpdate(reno){
 	var form = document.form2;
@@ -60,7 +94,7 @@ function replyUpdate(reno){
 	form.rememo.focus();
 }
 
-/*수정저장*/
+// 수정저장
 function replyUpdateSave(){
 	if ($.trim($('#rememo2').val())=="") {
 		alert("글 내용을 입력해주세요.");
@@ -70,47 +104,40 @@ function replyUpdateSave(){
 	$('#form2').attr('action', host+contextPath+'/boardReplySave').submit();
 } 
 
-/*수정취소*/
+// 수정취소
 function replyUpdateCancel(){
-	var form = document.form2;
-	var replyDiv = document.getElementById("replyDiv");
-	document.body.appendChild(replyDiv);
-	replyDiv.style.display = "none";
+	hideDiv("#replyDiv");
 	
-	var oldReno = document.getElementById("reply"+updateReno);
-	oldReno.innerText = updateRememo;
+	$("#reply"+updateReno).text(updateRememo);
 	updateReno = updateRememo = null;
 } 
 
-/*대댓글폼 append*/
+// 대댓글폼 append
 function replyReply(reno){
-	var form = document.form3;
-	var reply = document.getElementById("reply"+reno);
-	var replyDia = document.getElementById("replyDialog");
-	replyDia.style.display = "";
+	$("#replyDialog").show();
 	
 	if (updateReno) {
 		replyUpdateCancel();
 	} 
 	
-	form.rememo.value = "";
-	form.reparent.value=reno;
-	reply.appendChild(replyDia);
-	form.rewriter.focus();
+	$("#reparent3").val(reno);
+	$("#rememo3").val("");
+	$("#replyDialog").appendTo($($("#reply"+reno)));
+	$("#rewriter3").focus();
 }
 
-/*대댓글취소*/
+// 대댓글취소
 function replyReplyCancel(){
-	hideDiv("replyDialog");
+	hideDiv("#replyDialog");
 } 
 
+// 영역감추기함수
 function hideDiv(id){
-	var div = document.getElementById(id);
-	div.style.display = "none";
-	document.body.appendChild(div);
+	$(id).hide();
+	$(id).appendTo(document.body);
 }
 
-/*대댓글저장*/
+// 대댓글저장
 function replyReplySave(){
 	if ($.trim($('#rewriter3').val())=="") {
 		alert("작성자를 입력해주세요.");
@@ -123,5 +150,24 @@ function replyReplySave(){
 		return;
 	}
 	
-	$('#form3').attr('action', host+contextPath+'/boardReplySave').submit();
+	var formData = $("#form3").serialize();
+	$.ajax({
+		url: "boardReplySaveAjaxJSP",
+		type:"post", 
+		data : formData,
+		success: function(result){
+			if (result!=="") {
+				var parent = $("#reparent3").val();
+				$("#replyItem"+parent).after(result);
+				$("#replyDialog").hide();
+				alert("저장되었습니다.");
+				
+				//저장한 후 초기화
+				$('#rewriter3').val("");
+				$('#rememo3').val("");
+			} else{
+				alert("서버에 오류가 있어서 저장되지 않았습니다.");
+			}
+		}
+	})
 }

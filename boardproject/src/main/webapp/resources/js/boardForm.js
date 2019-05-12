@@ -1,19 +1,17 @@
 function formSave() {
-	var form1 = document.form1;
-	
-	if(form1.brdwriter.value.trim()==""){
+	if($.trim($('#brdwriter').val())==""){
 		alert("작성자를 입력해 주세요");
-		form1.brdwriter.focus();
+		$('#brdwriter').focus();
 		return;
-	} else if(form1.brdtitle.value.trim()==""){
+	} else if($.trim($('#brdtitle').val())==""){
 		alert("제목을 입력해 주세요");
-		form1.brdtitle.focus();
+		$('#brdtitle').focus();
 		return;
-	} else if(form1.brdmemo.value.trim()==""){
+	} else if($.trim($('#brdmemo').val())==""){
 		alert("내용을 입력해 주세요");
-		form1.brdmemo.focus();
+		$('#brdmemo').focus();
 		return;
 	}
 	
-	form1.submit();
+	$('#form1').submit();
 };

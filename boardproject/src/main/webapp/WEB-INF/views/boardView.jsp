@@ -10,7 +10,11 @@
 <title>board</title>
 
 <script src="${contextPath}/js/jquery-3.4.1.min.js"></script>
-<script type="text/javascript" src="${contextPath}/js/boardView.js"></script>
+<!-- 기존버전 -->
+<%-- <script type="text/javascript" src="${contextPath}/js/boardView.js"></script> --%>
+
+<!-- ajax적용버전 -->
+<script type="text/javascript" src="${contextPath}/js/boardViewAjax.js"></script>
 
 </head>
 <body>
@@ -56,43 +60,43 @@
 	<p>&nbsp;</p>
 	<div style="border: 1px solid; width: 600px; padding: 5px">
 		<form name="form1" id="form1" method="post">
-	    <input type="hidden" name="brdno" value="<c:out value="${boardInfo.brdno}"/>">
-		
-		작성자: <input type="text" name="rewriter" size="20" maxlength="20"> <br/>
-		<textarea name="rememo" rows="3" cols="60" maxlength="500" placeholder="댓글을 달아주세요."></textarea>
+	    <input type="hidden" id="brdno1" name="brdno" value="<c:out value="${boardInfo.brdno}"/>">
+		작성자: <input type="text" id="rewriter1" name="rewriter" size="20" maxlength="20"> <br/>
+		<textarea name="rememo" id="rememo1" rows="3" cols="60" maxlength="500" placeholder="댓글을 달아주세요."></textarea>
 	    <input type="button" onclick="replySubmit()" value="저장" >
 	    </form>
 	</div>
 	
-	<c:forEach var="replylist" items="${replylist}" varStatus="status">
-	    <div style="border: 1px solid gray; width: 600px; padding: 5px; margin-top: 5px; margin-left: <c:out value="${20*replylist.redepth}"/>px">
-	        
-	        <c:out value="${replylist.rewriter}"/> <c:out value="${replylist.redate}"/>
-	        <input type="button" onclick="replyDelete(${replylist.reno})" value="삭제">
-	        <input type="button" onclick="replyUpdate(${replylist.reno})" value="수정">
-	        <input type="button" onclick="replyReply(${replylist.reno})" value="댓글" >
-	        <br/>
-	        <div id="reply<c:out value="${replylist.reno}"/>"><c:out value="${replylist.rememo}"/></div>
-	    </div>
-	</c:forEach>
+	<div id="replyList">
+		<c:forEach var="replylist" items="${replylist}" varStatus="status">
+		    <div id="replyItem${replylist.reno }" style="border: 1px solid gray; width: 600px; padding: 5px; margin-top: 5px; margin-left: <c:out value="${20*replylist.redepth}"/>px">
+		        <c:out value="${replylist.rewriter}"/> <c:out value="${replylist.redate}"/>
+		        <input type="button" onclick="replyDelete(${replylist.reno})" value="삭제">
+		        <input type="button" onclick="replyUpdate(${replylist.reno})" value="수정">
+		        <input type="button" onclick="replyReply(${replylist.reno})" value="댓글" >
+		        <br/>
+		        <div id="reply<c:out value="${replylist.reno}"/>"><c:out value="${replylist.rememo}"/></div>
+		    </div>
+		</c:forEach>
+	</div>
 	
 	<div id="replyDiv" style="width: 99%; display:none">
 	    <form name="form2" id="form2" action="board5ReplySave" method="post">
-	        <input type="hidden" name="brdno" value="<c:out value="${boardInfo.brdno}"/>"> 
-	        <input type="hidden" name="reno" > 
-	        <textarea name="rememo" rows="3" cols="60" maxlength="500"></textarea>
+	        <input type="hidden" id= "brdno2" name="brdno" value="<c:out value="${boardInfo.brdno}"/>"> 
+	        <input type="hidden" id= "reno2" name="reno" > 
+	        <textarea name="rememo" id="rememo2" rows="3" cols="60" maxlength="500"></textarea>
 	        <input type="button" onclick="replyUpdateSave()" value="저장" >
 	        <input type="button" onclick="replyUpdateCancel()" value="취소">
 	    </form>
 	</div>
 	
 	<div id="replyDialog" style="width: 99%; display:none">
-		<form name="form3" action="boardReplySave" method="post">
-			<input type="hidden" name="brdno" value="<c:out value="${boardInfo.brdno}"/>"> 
-			<input type="hidden" name="reno"> 
-			<input type="hidden" name="reparent"> 
-			작성자: <input type="text" name="rewriter" size="20" maxlength="20"> <br/>
-			<textarea name="rememo" rows="3" cols="60" maxlength="500"></textarea>
+		<form name="form3" id="form3" action="boardReplySave" method="post">
+			<input type="hidden" id="brdno3" name="brdno" value="<c:out value="${boardInfo.brdno}"/>"> 
+			<input type="hidden" id="reno3" name="reno"> 
+			<input type="hidden" id="reparent3" name="reparent"> 
+			작성자: <input type="text" id="rewriter3" name="rewriter" size="20" maxlength="20"> <br/>
+			<textarea name="rememo" id="rememo3" rows="3" cols="60" maxlength="500"></textarea>
 			<input type="button" onclick="replyReplySave()" value="저장">
 			<input type="button" onclick="replyReplyCancel()" value="취소">
 		</form>
