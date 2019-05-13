@@ -3,7 +3,7 @@
 
 <mapper namespace="com.miok.dao.BoardDAO">
 	<sql id="includeBoard">
-		WHERE BRDDELETEFLAG='N'
+		WHERE BGNO=#{bgno} AND BRDDELETEFLAG='N'
 		<if test="searchKeyword!=null and searchKeyword!='' and searchType!=''">
 			<foreach item="item" index="index" collection="searchTypeArr">
 				AND ${item} LIKE CONCAT('%', #{searchKeyword},'%' )
@@ -11,13 +11,13 @@
 		</if>
     </sql>
 	
-	<select id="selectBoardCount" resultType="int" parameterType="com.miok.common.SearchVO">
+	<select id="selectBoardCount" resultType="int" parameterType="com.miok.vo.SearchVO">
 		SELECT COUNT(*)
 		FROM TBL_BOARD
 		<include refid="includeBoard" />
 	</select>
 	
-	<select id="selectBoardList" resultType="com.miok.vo.BoardVO" parameterType="com.miok.common.SearchVO">
+	<select id="selectBoardList" resultType="com.miok.vo.BoardVO" parameterType="com.miok.vo.SearchVO">
 		SELECT BRDNO, BRDTITLE,
 		BRDWRITER, DATE_FORMAT(BRDDATE,'%Y-%m-%d') BRDDATE, BRDHIT,
 		(SELECT COUNT(*) FROM TBL_BOARDFILE WHERE BRDNO=TB.BRDNO) FILECNT
@@ -32,8 +32,8 @@
 			SELECT IFNULL(MAX(BRDNO),0)+1 FROM TBL_BOARD
 		</selectKey>
 		
-		INSERT INTO TBL_BOARD(BRDNO, BRDTITLE, BRDWRITER, BRDMEMO, BRDDATE, BRDHIT, BRDDELETEFLAG)
-		VALUES (#{brdno}, #{brdtitle}, #{brdwriter}, #{brdmemo}, NOW(), 0, 'N' )
+		INSERT INTO TBL_BOARD(BGNO, BRDNO, BRDTITLE, BRDWRITER, BRDMEMO, BRDDATE, BRDHIT, BRDDELETEFLAG)
+		VALUES (#{bgno}, #{brdno}, #{brdtitle}, #{brdwriter}, #{brdmemo}, NOW(), 0, 'N' )
 	</insert>
 
 	<update id="updateBoard" parameterType="com.miok.vo.BoardVO">
@@ -45,32 +45,32 @@
 		AND BRDNO=#{brdno}
 	</update>
 
-	<select id="selectBoardOne" parameterType="int" resultType="com.miok.vo.BoardVO">
-		SELECT BRDNO, BRDTITLE, BRDWRITER, BRDMEMO,
+	<select id="selectBoardOne" parameterType="String" resultType="com.miok.vo.BoardVO">
+		SELECT BGNO, BRDNO, BRDTITLE, BRDWRITER, BRDMEMO,
 		DATE_FORMAT(BRDDATE,'%Y-%m-%d') BRDDATE
 		FROM board.TBL_BOARD
-		WHERE BRDNO=#{brdno}
+		WHERE BRDDELETEFLAG='N' AND BRDNO=#{brdno}
 	</select>
 
-	<update id="deleteBoardOne" parameterType="int">
+	<update id="deleteBoardOne" parameterType="String">
 		UPDATE TBL_BOARD
 		SET BRDDELETEFLAG = 'Y'
 		WHERE BRDNO=#{brdno}
 	</update>
 	
-	<update id="updateBoardHit" parameterType="int">
+	<update id="updateBoardHit" parameterType="String">
 		UPDATE TBL_BOARD
 		SET BRDHIT = BRDHIT + 1
 		WHERE BRDNO = #{brdno}
 	</update>
 	
 	<!-- 파일첨부부분 -->
-	<insert id="insertBoardFile" parameterType="com.miok.common.FileVO">
+	<insert id="insertBoardFile" parameterType="com.miok.vo.FileVO">
 		INSERT INTO TBL_BOARDFILE (BRDNO, FILENAME, REALNAME, FILESIZE)
 		VALUES (#{parentPK}, #{filename}, #{realname}, #{filesize})
 	</insert>
 	
-	<select id="selectBoardFileList" resultType="com.miok.common.FileVO" parameterType="String">
+	<select id="selectBoardFileList" resultType="com.miok.vo.FileVO" parameterType="String">
 		SELECT FILENO, FILENAME, REALNAME, FILESIZE
 		FROM TBL_BOARDFILE
 		WHERE BRDNO=#{brdno}

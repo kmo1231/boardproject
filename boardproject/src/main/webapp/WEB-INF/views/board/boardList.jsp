@@ -1,22 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ include file="common/common.jsp" %>
+<%@ include file="../common/common.jsp" %>
 
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>board</title>
+<title>${bgInfo.bgname }</title>
 
 <script src="${contextPath}/js/jquery-3.4.1.min.js"></script>
-<script type="text/javascript" src="${contextPath}/js/boardList.js" ></script>
+<script type="text/javascript" src="${contextPath}/js/board/boardList.js" ></script>
 
 
 </head>
+<h1>${bgInfo.bgname }</h1>
+
 <body>
-	
+	<c:if test="${bgInfo.bgreadonly =='N'}">
 	<input type="button" onclick="boardWrite()" value="글쓰기" />
+	</c:if>
+	<input type="hidden" id="bgno" value="${searchVO.bgno }" >
 					
 	<table border="1" style="width:600px">
 		<caption>게시판</caption>
@@ -54,7 +58,7 @@
 		</tbody>
 	</table>
 	
-	<form id="form1" name="form1" method="post" action="boardList">
+	<form id="form1" name="form1" method="post">
 	
 	<jsp:include page="/WEB-INF/views/common/paging.jsp"/>
 	

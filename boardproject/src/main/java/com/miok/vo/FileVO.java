@@ -1,4 +1,4 @@
-package com.miok.common;
+package com.miok.vo;
 
 public class FileVO {
     private Integer fileno;		//글번호

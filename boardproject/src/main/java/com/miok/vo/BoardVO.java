@@ -6,9 +6,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class BoardVO {
 
-	private String brdno, brdtitle, brdwriter, brdmemo, brddate, brdhit, brddeleteflag, filecnt;
+	private String bgno, brdno, brdtitle, brdwriter, brdmemo, brddate, brdhit, brddeleteflag, filecnt;
 	private List<MultipartFile> uploadfile;
 	
+	
+	public String getBgno() {
+		return bgno;
+	}
+
+	public void setBgno(String bgno) {
+		this.bgno = bgno;
+	}
+
 	public String getBrdno() {
 		return brdno;
 	}

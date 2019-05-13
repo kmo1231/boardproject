@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.miok.vo.FileVO;
+
 public class FileUtil {
     /**
      * 파일 업로드.

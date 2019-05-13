@@ -11,11 +11,11 @@ import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import com.miok.common.FileVO;
-import com.miok.common.SearchVO;
 import com.miok.dao.BoardDAO;
 import com.miok.vo.BoardReplyVO;
 import com.miok.vo.BoardVO;
+import com.miok.vo.FileVO;
+import com.miok.vo.SearchVO;
 
 @Service
 public class BoardServiceImp implements BoardService{
@@ -64,12 +64,12 @@ public class BoardServiceImp implements BoardService{
 	}
 
 	@Override
-	public BoardVO selectBoardOne(int brdno) {
+	public BoardVO selectBoardOne(String brdno) {
 		return boardDAO.selectBoardOne(brdno);
 	}
 
 	@Override
-	public void deleteBoardOne(int brdno) {
+	public void deleteBoardOne(String brdno) {
 		boardDAO.deleteBoardOne(brdno);
 	}
 
@@ -79,7 +79,7 @@ public class BoardServiceImp implements BoardService{
 	}
 
 	@Override
-	public void updateBoardHit(int brdno) {
+	public void updateBoardHit(String brdno) {
 		boardDAO.updateBoardHit(brdno);
 	}
 	

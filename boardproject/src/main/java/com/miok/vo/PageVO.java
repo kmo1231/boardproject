@@ -1,6 +1,7 @@
-package com.miok.common;
+package com.miok.vo;
 
 public class PageVO {
+	
     private Integer displayRowCount = 5;			// 출력할 데이터 개수
     private Integer displayPage = 2;				// 출력할 페이지 번호 수
     private Integer rowStart;                       // 시작행번호

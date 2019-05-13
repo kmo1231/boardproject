@@ -1,5 +1,5 @@
 function boardWrite() {
-	location.href = host + contextPath + "/boardForm";
+	location.href = host + contextPath + "/boardForm?bgno="+$("#bgno").val();
 }
 
 function searchSubmit(){
@@ -7,8 +7,6 @@ function searchSubmit(){
 }
 
 function searchPageSubmit(page){
-	$('#page').value=page;
+	$('#page').val(page);
 	$('#form1').submit();
 }
-
-

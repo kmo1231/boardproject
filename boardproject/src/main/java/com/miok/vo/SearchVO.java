@@ -1,16 +1,17 @@
-package com.miok.common;
+package com.miok.vo;
 
 public class SearchVO extends PageVO{
-	private String brno;
+	
+	private String bgno;
 	private String searchKeyword;
 	private String searchType;
 	private String[] searchTypeArr;
 	
-	public String getBrno() {
-		return brno;
+	public String getBgno() {
+		return bgno;
 	}
-	public void setBrno(String brno) {
-		this.brno = brno;
+	public void setBgno(String bgno) {
+		this.bgno = bgno;
 	}
 	public String getSearchKeyword() {
 		return searchKeyword;

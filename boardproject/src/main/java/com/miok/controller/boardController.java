@@ -19,12 +19,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.miok.common.FileUtil;
-import com.miok.common.FileVO;
-import com.miok.common.PageVO;
-import com.miok.common.SearchVO;
+import com.miok.service.BoardGroupSvc;
 import com.miok.service.BoardService;
+import com.miok.vo.BoardGroupVO;
 import com.miok.vo.BoardReplyVO;
 import com.miok.vo.BoardVO;
+import com.miok.vo.FileVO;
+import com.miok.vo.PageVO;
+import com.miok.vo.SearchVO;
 
 /*
 	ver.1
@@ -56,6 +58,9 @@ import com.miok.vo.BoardVO;
 	
 	ver.7
 	- jquery 일부적용 및 댓글추가, 삭제부분 ajax로 구현
+	
+	ver.8
+	- dynatree 이용한 멀티게시판
 */
 
 @Controller
@@ -63,32 +68,58 @@ public class boardController {
 
 	@Autowired
 	private BoardService boardService;
+	@Autowired
+	private BoardGroupSvc boardGroupSvc;
 
 	// 리스트
 	@RequestMapping(value = "/boardList")
 	public String boardList(SearchVO searchVO, Model model) {
+		
+		BoardGroupVO bgInfo = boardGroupSvc.selectBoardGroupOneUsed(searchVO.getBgno());
+		if(bgInfo == null) {
+			return "/boardgroup/BoardGroupFail";
+		}
+		
+		if(searchVO.getBgno() == null) {
+			searchVO.setBgno("1");
+		}
+		
 		searchVO.pageCalculate(boardService.selectBoardCount(searchVO));
 		
 		List<BoardVO> boardList = boardService.selectBoardList(searchVO);
 
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("searchVO", searchVO);
-		return "/boardList";
+		model.addAttribute("bgInfo", bgInfo);
+		
+		return "/board/boardList";
 	}
 
 	// 글쓰기
 	@RequestMapping(value = "/boardForm")
 	public String boardForm(HttpServletRequest request, Model model) {
+		String bgno = request.getParameter("bgno");
 		String brdno = request.getParameter("brdno");
+		
+		//수정일 경우
 		if(brdno != null) {
-			BoardVO boardInfo = boardService.selectBoardOne(Integer.parseInt(brdno));
+			BoardVO boardInfo = boardService.selectBoardOne(brdno);
 			List<FileVO> filelist = boardService.selectBoardFileList(brdno);
+			bgno = boardInfo.getBgno();
 			
 			model.addAttribute("boardInfo", boardInfo);
 			model.addAttribute("filelist", filelist);
 		}
 		
-		return "/boardForm";
+		BoardGroupVO bgInfo = boardGroupSvc.selectBoardGroupOneUsed(bgno);
+		if(bgInfo == null) {
+			return "/boardgroup/BoardGroupFail";
+		}
+		
+		model.addAttribute("bgno", bgno);
+		model.addAttribute("bgInfo", bgInfo);
+		
+		return "/board/boardForm";
 	}
 	
 	// 글쓰기 저장
@@ -101,7 +132,7 @@ public class boardController {
 		
 		boardService.insertBoard(boardInfo, filelist, fileno);
 
-   		return "redirect:/boardList";
+   		return "redirect:/boardList?bgno="+boardInfo.getBgno();
     }
 	
 	// 글읽기
@@ -109,27 +140,34 @@ public class boardController {
 	public String boardView(HttpServletRequest request, Model model) {
 		String brdno = request.getParameter("brdno");
 		
-		boardService.updateBoardHit(Integer.parseInt(brdno));
-		BoardVO boardInfo = boardService.selectBoardOne(Integer.parseInt(brdno));
+		boardService.updateBoardHit(brdno);
+		BoardVO boardInfo = boardService.selectBoardOne(brdno);
 		List<FileVO> filelist = boardService.selectBoardFileList(brdno);
 		
 		List<BoardReplyVO> replylist = boardService.selectBoardReplyList(brdno);
 		
+		BoardGroupVO bgInfo = boardGroupSvc.selectBoardGroupOneUsed(boardInfo.getBgno());
+		if(bgInfo == null) {
+			return "/boardgroup/BoardGroupFail";
+		}
+		
 		model.addAttribute("boardInfo", boardInfo);
 		model.addAttribute("filelist", filelist);
 		model.addAttribute("replylist", replylist);
+		model.addAttribute("bgInfo", bgInfo);
 		
-		return "/boardView";
+		return "/board/boardView";
 	}
 
 	// 글삭제
 	@RequestMapping(value = "/boardDelete")
 	public String boardDelete(HttpServletRequest request) {
-		int brdno = Integer.parseInt(request.getParameter("brdno"));
-
+		String brdno = request.getParameter("brdno");
+		String bgno = request.getParameter("bgno");
+		
 		boardService.deleteBoardOne(brdno);
 
-		return "redirect:/boardList";
+		return "redirect:/boardList?bgno="+bgno;
 	}
 	
 	// 댓글저장

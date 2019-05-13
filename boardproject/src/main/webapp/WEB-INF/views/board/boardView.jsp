@@ -1,25 +1,28 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ include file="common/common.jsp" %>
+<%@ include file="../common/common.jsp" %>
 
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>board</title>
+<title>${bgInfo.bgname }</title>
 
 <script src="${contextPath}/js/jquery-3.4.1.min.js"></script>
 <!-- 기존버전 -->
 <%-- <script type="text/javascript" src="${contextPath}/js/boardView.js"></script> --%>
 
 <!-- ajax적용버전 -->
-<script type="text/javascript" src="${contextPath}/js/boardViewAjax.js"></script>
+<script type="text/javascript" src="${contextPath}/js/board/boardViewAjax.js"></script>
 
 </head>
 <body>
+
+<h1>${bgInfo.bgname }</h1>
 	<form id="form0" method="post">
 	<input type="hidden" name="brdno" value="<c:out value="${boardInfo.brdno}"/>">
+	<input type="hidden" name="bgno" value=${bgInfo.bgno }>
 	<table border="1" style="width: 600px">
 		<caption>게시판</caption>
 		<colgroup>
@@ -58,6 +61,7 @@
 	<input type="button" onclick="brdUpd()" value="수정" />
 	
 	<p>&nbsp;</p>
+	<c:if test="${bgInfo.bgreply =='Y' }">
 	<div style="border: 1px solid; width: 600px; padding: 5px">
 		<form name="form1" id="form1" method="post">
 	    <input type="hidden" id="brdno1" name="brdno" value="<c:out value="${boardInfo.brdno}"/>">
@@ -66,6 +70,7 @@
 	    <input type="button" onclick="replySubmit()" value="저장" >
 	    </form>
 	</div>
+	</c:if>
 	
 	<div id="replyList">
 		<c:forEach var="replylist" items="${replylist}" varStatus="status">
